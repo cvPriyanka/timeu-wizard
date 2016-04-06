@@ -316,16 +316,10 @@ Custom property | Description | Default
           return scaleX+","+scaleY;
       },
       tabSelected: function(e){
-        //alert("hello");
-        console.log(e.srcElement.id);
-        
-        
-        
         var index = event.srcElement.id;
         index = parseInt(index);
         if ((index + 1) < this.step) {
 			this.step=index+1;
-
         }
       }
     });
