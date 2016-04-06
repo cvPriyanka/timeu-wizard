@@ -75,21 +75,11 @@ Custom property | Description | Default
       
       ul {
         display:flex;
-        justify-content:space-between;
+        justify-content:flex-start;
         padding:0;
         margin:0;
       }
-      
-      #line{
-        background-color:var(--timeu-wizard-line-color,#dfdfdf);
-      }
-      .line {
-        height: var(--timeu-wizard-line-size,1px);
-        position: absolute;
-        top: calc(var(--timeu-wizard-circle-size,40px)/2);
-        left: 0;
-        right: 0;
-      }
+
       
       #filling {
         background-color: var(--timeu-wizard-filling-color,#2db36f);
@@ -125,14 +115,18 @@ Custom property | Description | Default
       }
       
       #container {
-        width: 100%;
+        width: 90%;
         height:100%;
+        margin:2%;
         position:relative;
+        background-color:#E9E9EB;
+
       }
       #wizard {
         counter-reset: step;
         height:100%;
         width:100%;
+
       }
       #wizard li {
         list-style-type:none;
@@ -147,20 +141,20 @@ Custom property | Description | Default
       #wizard li:before {
         content: counter(step);
         counter-increment: step;
-        width:  var(--timeu-wizard-circle-size,40px);
-        height:  var(--timeu-wizard-circle-size,40px);
-        line-height:  var(--timeu-wizard-circle-size,40px);
-        border: var(--timeu-wizard-circle-border-size,1px) solid var(--timeu-wizard-filling-color,#dfdfdf);
+        width:  var(--timeu-wizard-width,220px);
+        height:  var(--timeu-wizard-height,40px);
+        line-height:  var(--timeu-wizard-height,40px);
+       /* border: var(--timeu-wizard-circle-border-size,1px) solid var(--timeu-wizard-filling-color,#dfdfdf);*/
         display: block;
         text-align: center;
         font-family:var(--timeu-wizard-step-font-family);
-        margin: 0 auto 5px auto;
-        border-radius: 50%;
-        background-color: white;
+        margin: 0 0 0 0;
+        background-color: #E9E9EB;
+        color: black;
         -webkit-transition: background-color var(--timeu-wizard-anim-speed,0.5s), border-color var(--timeu-wizard-anim-speed,0.5s);;
         -moz-transition: background-color var(--timeu-wizard-anim-speed,0.5s), border-color var(--timeu-wizard-anim-speed,0.5s);
         transition: background-colorvar(--timeu-wizard-anim-speed,0.5s), border-color var(--timeu-wizard-anim-speed,0.5s);
-        font-size:var(--timeu-wizard-step-font-size,25px);
+        font-size:var(--timeu-wizard-step-font-size,14px);
       }
       #wizard li.active, #wizard li.done  {
         color: var(--time-wizard-active-color,#2db36f);
@@ -177,14 +171,19 @@ Custom property | Description | Default
       }
       .checkicon {
         opacity:0;
-        height: var(--timeu-wizard-circle-size,40px);
-        width:  var(--timeu-wizard-circle-size,40px);
+        height: var(--timeu-wizard-height,40px);
+        width:  var(--timeu-wizard-width,220px);
         position: absolute;
-        fill: var(--time-wizard-active-color,#2db36f);
+        fill: var(--time-wizard-active-color,#ffffff);
+	background-color:#ff6632;
         top: 0px;
-        left: calc(50% - var(--timeu-wizard-circle-size,40px)/2);
+        left: calc(50% - var(--timeu-wizard-width,220px)/2);
         transition: all var(--timeu-wizard-anim-speed,0.5s);
         -webkit-transition: all var(--timeu-wizard-anim-speed,0.5s);
+        font-size:var(--timeu-wizard-step-font-size,14px);
+        color:white;
+        line-height:  var(--timeu-wizard-height,40px);
+        
       }
       #wizard li.done .checkicon {
         opacity:1;
@@ -194,19 +193,10 @@ Custom property | Description | Default
       }
     </style>
     <div id="container">
-      <span id="line" class="line"></span>
-      <span id="filling" class="line" style$="transform: scale({{_calculateFilling(steps,step,vertical)}});"></span>
       <ul id="wizard">
         <template is="dom-repeat" items="{{steps}}" >
-          <li class$="{{_computeClass(index,item,step)}}" data-content$="{{item.content}}">
-            <div class="checkicon">
-              <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block; width: 100%; height: 100%;">
-                <g>
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-                </g>
-              </svg>
-            </div>
-            <span class="label">{{_getLabel(item)}}</span>
+          <li class$="{{_computeClass(index,item,step)}}" data-content$="{{_getLabel(item)}}">
+            <div id="{{index}}" class="checkicon" on-tap="tabSelected">{{_getLabel(item)}}</div>
           </li>
         </template>
       </ul>
@@ -229,7 +219,8 @@ Custom property | Description | Default
           value:1,
           observer:'_validateStep'
         },
-  
+        
+
         /**
         * Specifiies the available steps.
         *
@@ -323,8 +314,20 @@ Custom property | Description | Default
           var scaleX = (vertical ? 1 : ratio);
           var scaleY = (vertical ? ratio : 1);
           return scaleX+","+scaleY;
+      },
+      tabSelected: function(e){
+        //alert("hello");
+        console.log(e.srcElement.id);
+        
+        
+        
+        var index = event.srcElement.id;
+        index = parseInt(index);
+        if ((index + 1) < this.step) {
+			this.step=index+1;
+
+        }
       }
     });
   </script>
 </dom-module>
-
