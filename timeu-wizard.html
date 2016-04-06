@@ -196,7 +196,7 @@ Custom property | Description | Default
       <ul id="wizard">
         <template is="dom-repeat" items="{{steps}}" >
           <li class$="{{_computeClass(index,item,step)}}" data-content$="{{_getLabel(item)}}">
-            <div id="{{index}}" class="checkicon" on-tap="tabSelected">{{_getLabel(item)}}</div>
+            <div id="{{index}}" class="checkicon">{{_getLabel(item)}}</div>
           </li>
         </template>
       </ul>
@@ -314,13 +314,6 @@ Custom property | Description | Default
           var scaleX = (vertical ? 1 : ratio);
           var scaleY = (vertical ? ratio : 1);
           return scaleX+","+scaleY;
-      },
-      tabSelected: function(e){
-        var index = event.srcElement.id;
-        index = parseInt(index);
-        if ((index + 1) < this.step) {
-			this.step=index+1;
-        }
       }
     });
   </script>
